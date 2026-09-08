@@ -1,7 +1,7 @@
 /* Eyes Green -Theme for Typora
-version: 2.1.2
+version: 2.1.1
 author:AqiMake
-finish-date: 2026-5-8
+finish-date: 2026-04-25
 homepage: https://github.com/AqiMake/typora-eyes-green-theme
 based on: typora-default-themes (https://github.com/typora/typora-default-themes)
  */
@@ -11,7 +11,7 @@ based on: typora-default-themes (https://github.com/typora/typora-default-themes
     --bg-color: #141c18;
     --side-bar-bg-color: #1b2520;
     --text-color: #a5b4aa;
-    --control-text-color: var(--text-color);
+    --control-text-color: #a5b4aa;
     --active-file-bg-color: #2a3a32;
     --active-file-border-color: #63a873;
     --code-block-bg-color: #24322b;
@@ -58,12 +58,12 @@ based on: typora-default-themes (https://github.com/typora/typora-default-themes
 html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
-    background-color: var(--bg-color);
+    background-color: #141c18;
 }
 
 body {
     font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', 'SF Pro', sans-serif;
-    color: var(--text-color);
+    color: rgb(214, 222, 217);
     line-height: 1.6;
 }
 
@@ -649,4 +649,32 @@ code::selection {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #63A873;   /* 悬停时更深 */
+}
+/* ==================== 图片图注（caption，2026-09-07 增补） ====================
+   原理：Typora 只把 title 放在 <img> 上，而 img 是替换元素不能挂伪元素，
+   纯 CSS 也读不到子元素的属性；因此配套在 Typora 的 frame.js 末尾注入了
+   一段脚本，把 img 的 title 同步到外层 .md-image 容器的 data-img-title
+   属性上，这里用 attr() 渲染成图注。
+   日常写法就是原生语法：![alt](图片路径 "图注文字")
+   卸载/重装说明见 themes/image-caption-patch/README.md */
+.md-image[data-img-title] {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 100%;
+}
+.md-image[data-img-title] img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.md-image[data-img-title]::after {
+    content: attr(data-img-title);
+    display: block;
+    text-align: center;
+    font-size: 0.8em;
+    color: #8aa092;
+    line-height: 1.6;
+    margin-top: 0.45em;
+    padding: 0 1.5em;
+    word-break: break-word;
 }

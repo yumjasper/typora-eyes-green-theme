@@ -528,3 +528,32 @@ code::selection {
 ::-webkit-scrollbar-thumb:hover {
   background: #57A266;   /* 悬停时更深 */
 }
+
+/* ==================== 图片图注（caption，2026-09-07 增补） ====================
+   原理：Typora 只把 title 放在 <img> 上，而 img 是替换元素不能挂伪元素，
+   纯 CSS 也读不到子元素的属性；因此配套在 Typora 的 frame.js 末尾注入了
+   一段脚本，把 img 的 title 同步到外层 .md-image 容器的 data-img-title
+   属性上，这里用 attr() 渲染成图注。
+   日常写法就是原生语法：![alt](图片路径 "图注文字")
+   卸载/重装说明见 themes/image-caption-patch/README.md */
+.md-image[data-img-title] {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 100%;
+}
+.md-image[data-img-title] img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.md-image[data-img-title]::after {
+    content: attr(data-img-title);
+    display: block;
+    text-align: center;
+    font-size: 0.8em;
+    color: #6f8a77;
+    line-height: 1.6;
+    margin-top: 0.45em;
+    padding: 0 1.5em;
+    word-break: break-word;
+}
